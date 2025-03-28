@@ -50,7 +50,7 @@ class TSPAnimation(Scene):
         edges = []
         for i in range(num_cities):
             for j in range(i + 1, num_cities):
-                edge = Line(positions[i] + shift_vector, positions[j] + shift_vector, color=GREY_C, stroke_width=2)
+                edge = Line(positions[i] + shift_vector, positions[j] + shift_vector, color=GREY_A, stroke_width=5)
                 edges.append(edge)
         
         # Animate edges gradually
