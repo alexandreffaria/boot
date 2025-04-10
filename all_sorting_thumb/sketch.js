@@ -14,6 +14,9 @@ let currentValue = START_VALUE;
 let animationStarted = false;
 let animationComplete = false;
 
+// Motion blur settings
+const MOTION_BLUR_AMOUNT = 20; // Lower = more blur, Higher = less blur
+
 // Colors
 const BG_COLOR = [20, 20, 30];
 const MACHINE_COLOR = [40, 40, 50];
@@ -35,7 +38,18 @@ function setup() {
 }
 
 function draw() {
-  background(BG_COLOR);
+  // Apply motion blur effect instead of clearing the background
+  if (animationStarted && !animationComplete) {
+    // Draw semi-transparent rectangle over previous frame
+    push();
+    noStroke();
+    fill(BG_COLOR[0], BG_COLOR[1], BG_COLOR[2], 255 / MOTION_BLUR_AMOUNT);
+    rect(0, 0, width, height);
+    pop();
+  } else {
+    // Clear background normally when not animating
+    background(BG_COLOR);
+  }
   
   // Draw slot machine
   drawSlotMachine();
@@ -73,17 +87,6 @@ function drawSlotMachine() {
   fill(TEXT_COLOR);
   textSize(80);
   text("$" + Math.floor(currentValue).toLocaleString('en-US'), width/2, height/2);
-  pop();
-  
-  // Lever
-  push();
-  stroke(100);
-  strokeWeight(2);
-  fill(150);
-  rect(width/2 + 220, height/2 - 100, 20, 200, 5);
-  fill(RED_COLOR);
-  noStroke();
-  ellipse(width/2 + 230, height/2 - 100, 40, 40);
   pop();
   
   // Decorative lights
@@ -195,9 +198,18 @@ function keyPressed() {
     currentValue = START_VALUE;
     animationStarted = false;
     animationComplete = false;
+    // Clear the canvas completely when restarting
+    background(BG_COLOR);
     setTimeout(() => {
       animationStarted = true;
       startTime = millis();
     }, 500);
+  }
+  
+  // Save animation frames when 'f' key is pressed
+  if (key === 'f' || key === 'F') {
+    saveFrames('slot-machine-frame', 'png', 1, 30, data => {
+      console.log('Saved ' + data.length + ' frames');
+    });
   }
 }
