@@ -101,9 +101,8 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			team1 := units.CreateTeam(m.Player1Race, m.Player1Count)
 			team2 := units.CreateTeam(m.Player2Race, m.Player2Count)
 			m.Simulator = battle.NewBattleSimulator(team1, team2)
-			startMsg := fmt.Sprintf("Battle started: %s vs %s at x%.2f speed.",
-				m.Player1Race, m.Player2Race, m.Multiplier)
-			m.BattleLog = append(m.BattleLog, startMsg)
+
+			m.BattleLog = append(m.BattleLog)
 			m.State = StateBattle
 			return m, tickCmd(0)
 		}
