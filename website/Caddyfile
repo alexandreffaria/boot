@@ -1,0 +1,9 @@
+{
+  admin :2020
+}
+
+:8080 {
+  root * .
+  file_server
+}
+
